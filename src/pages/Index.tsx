@@ -1,13 +1,46 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import React, { useState } from 'react';
+import Login from '@/components/Login';
+import Register from '@/components/Register';
+import Dashboard from '@/components/Dashboard';
 
 const Index = () => {
+  const [currentPage, setCurrentPage] = useState<'login' | 'register' | 'dashboard'>('login');
+  const [userData, setUserData] = useState(null);
+
+  const handleLogin = (user: any) => {
+    setUserData(user);
+    setCurrentPage('dashboard');
+  };
+
+  const handleRegister = (user: any) => {
+    setUserData(user);
+    setCurrentPage('dashboard');
+  };
+
+  const handleLogout = () => {
+    setUserData(null);
+    setCurrentPage('login');
+  };
+
+  if (currentPage === 'dashboard' && userData) {
+    return <Dashboard userData={userData} onLogout={handleLogout} />;
+  }
+
+  if (currentPage === 'register') {
+    return (
+      <Register
+        onRegister={handleRegister}
+        onSwitchToLogin={() => setCurrentPage('login')}
+      />
+    );
+  }
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
-      </div>
-    </div>
+    <Login
+      onLogin={handleLogin}
+      onSwitchToRegister={() => setCurrentPage('register')}
+    />
   );
 };
 
